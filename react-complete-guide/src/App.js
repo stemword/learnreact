@@ -1,7 +1,20 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
+//import Radium,{StyleRoot} from 'radium';
+import styled from 'styled-components';
 
+ let StyledButton = styled.button`background-color : ${props => props.alt?'red':'green'};
+      color: white;
+      font:inherit;
+      border:1px solid blue;
+      padding:8px;
+      cursor:pointer;
+      &:hover {
+        background-color:${props => props.alt?'salmon':'lightgreen'};
+      color:black;
+      }
+      `
 class App extends Component {
   state = {
     persons: [
@@ -33,7 +46,7 @@ class App extends Component {
 
   nameChangedHandler = (event, id) => {
     const personIndex = this.state.persons.findIndex(p=>{
-      return p.id == id;
+      return p.id === id;
     });
 
     const person = {...this.state.persons[personIndex]};
@@ -45,6 +58,15 @@ class App extends Component {
     });
   }
   render() {
+    const style = {
+      backgroundColor : 'green',
+      color: 'white',
+      font:"inherit",
+      border:'1px solid blue',
+      padding:'8px',
+      cursor:'pointer'
+      
+    };
     var persons = null;
     if(this.state.showPersons) {
       persons = (<div>
@@ -57,19 +79,28 @@ class App extends Component {
           changed={(event) => this.nameChangedHandler(event,person.id)}
           />
         })}
-        </div>)
+        </div>);
+        style.backgroundColor = 'red';
+        
     }
-    const style = {
-      backgroundColor : 'white',
-      font:"inherit",
-      border:'1px solid blue',
-      padding:'8px',
-      cursor:'pointer'
-    };
+
+    let classes = [];
+    if(this.state.persons.length <=2) {
+      classes.push('red');
+    }
+    if(this.state.persons.length <=1) {
+      classes.push('bold');
+    }
+
+
+
     return (
       <div className="App">
         <h1>Hi I am react app </h1>
-        <button style={style} onClick={() => this.togglePersonsHandler()}>Switch Name</button>
+        <p className={classes.join(' ')}>This really working.</p>
+        <StyledButton alt={this.state.showPersons} onClick={() => this.togglePersonsHandler()}>
+        Switch Name
+        </StyledButton>
         {persons}
       </div>
     );
